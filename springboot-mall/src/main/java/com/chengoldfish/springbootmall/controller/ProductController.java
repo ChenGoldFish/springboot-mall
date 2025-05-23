@@ -5,6 +5,7 @@ import com.chengoldfish.springbootmall.dto.ProductQueryParams;
 import com.chengoldfish.springbootmall.dto.ProductRequest;
 import com.chengoldfish.springbootmall.model.Product;
 import com.chengoldfish.springbootmall.service.ProductService;
+import com.chengoldfish.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,7 +26,7 @@ public class ProductController {
 
     //查詢商品列表 //category不是必要的值 -> requird=false
     @GetMapping("/products")
-    public  ResponseEntity<List<Product>> getProducts(
+    public  ResponseEntity<Page<Product>> getProducts(
             //查詢條件
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -49,9 +50,20 @@ public class ProductController {
         params.setLimit(limit);
         params.setOffset(offset);
 
+        //取得Product list (將 透過參數 所查詢到的商品 放到list)
         List<Product> productList=productService.getProducts(params);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        //取得product total
+        Integer total = productService.countProduct(params);
+
+        //設定分頁
+        Page<Product> page=new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResult(productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @GetMapping("/products/{productId}")
