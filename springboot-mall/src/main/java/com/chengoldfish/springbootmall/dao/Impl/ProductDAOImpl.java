@@ -43,6 +43,10 @@ public class ProductDAOImpl implements ProductDao {
             map.put("search","%"+params.getSearch()+"%");
         }
 
+        //orderby只能透過拼接使用
+        //不判斷null是因為有給default值
+        sql = sql + " ORDER BY " + params.getOrderBy() + " " + params.getSort();
+
         List<Product> productList=namedParameterJdbcTemplate.query(sql,map,new ProductRowMapper());
 
         return productList;
