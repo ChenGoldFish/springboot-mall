@@ -6,13 +6,17 @@ import com.chengoldfish.springbootmall.dto.ProductRequest;
 import com.chengoldfish.springbootmall.model.Product;
 import com.chengoldfish.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 public class ProductController {
 
@@ -28,13 +32,22 @@ public class ProductController {
 
             //排序
             @RequestParam(defaultValue = "created_date") String orderBy,//預設為create_date, 有額外傳則依照傳值
-            @RequestParam(defaultValue = "desc") String sort //預設desc 降序,asc升序
+            @RequestParam(defaultValue = "desc") String sort,//預設desc 降序,asc升序
+
+            //分頁 //以前端來說 可有可無的參數 在後端要思考用required還是default來傳遞
+            //選用defaultValue原因是為了效能。假設100萬筆資料，會有效能問題
+            //4-13驗證請求參數在請求參數裡，CALSS加@Validated
+            //@MAX @MIN -> 0 > 值 < 1000 , @Min(0)避免值為負
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,//最多可以取得幾筆參數
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset//跳過多少幾筆數據
     ){
         ProductQueryParams params = new ProductQueryParams();
         params.setCategory(category);
         params.setSearch(search);
         params.setOrderBy(orderBy);
         params.setSort(sort);
+        params.setLimit(limit);
+        params.setOffset(offset);
 
         List<Product> productList=productService.getProducts(params);
 
