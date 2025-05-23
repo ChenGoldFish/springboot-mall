@@ -13,10 +13,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ProductDAOImpl implements ProductDao {
@@ -30,17 +27,8 @@ public class ProductDAOImpl implements ProductDao {
 
         Map<String,Object> map = new HashMap<>();
 
-        //查詢條件 catrgory
-        if(params.getCategory() != null){
-            sql=sql+" AND category = :category";
-            map.put("category",params.getCategory().name());
-        }
-
-        //search
-        if(params.getSearch() != null){
-            sql=sql+" AND product_name LIKE :search";
-            map.put("search","%"+params.getSearch()+"%");
-        }
+        //查詢條件
+        sql = addFilteringSql(sql,map,params);
 
         //ForObject用於count
         //用total 接住 count查詢結果
@@ -56,17 +44,8 @@ public class ProductDAOImpl implements ProductDao {
 
         Map<String,Object> map = new HashMap<>();
 
-        //查詢條件 catrgory
-        if(params.getCategory() != null){
-            sql=sql+" AND category = :category";
-            map.put("category",params.getCategory().name());
-        }
-
-        //search
-        if(params.getSearch() != null){
-            sql=sql+" AND product_name LIKE :search";
-            map.put("search","%"+params.getSearch()+"%");
-        }
+        //查詢條件
+        sql = addFilteringSql(sql,map,params);
 
         //排序
         //orderby只能透過拼接使用
@@ -160,5 +139,23 @@ public class ProductDAOImpl implements ProductDao {
         map.put("productId",productId);
 
         namedParameterJdbcTemplate.update(sql,map);
+    }
+
+    //這個方法只有此class會用，所以優先使用private修飾子，可以更好管理使用範圍
+    private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams params) {
+
+        //查詢條件 catrgory
+        if(params.getCategory() != null){
+            sql=sql+" AND category = :category";
+            map.put("category",params.getCategory().name());
+        }
+
+        //search
+        if(params.getSearch() != null){
+            sql=sql+" AND product_name LIKE :search";
+            map.put("search","%"+params.getSearch()+"%");
+        }
+
+        return sql;
     }
 }
