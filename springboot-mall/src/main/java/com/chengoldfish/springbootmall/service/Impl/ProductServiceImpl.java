@@ -1,5 +1,6 @@
 package com.chengoldfish.springbootmall.service.Impl;
 
+import com.chengoldfish.springbootmall.constant.ProductCategory;
 import com.chengoldfish.springbootmall.dao.ProductDao;
 import com.chengoldfish.springbootmall.dto.ProductRequest;
 import com.chengoldfish.springbootmall.model.Product;
@@ -16,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
 
     @Override
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductCategory category,String search) {
+        return productDao.getProducts(category, search);
     }
 
     @Override

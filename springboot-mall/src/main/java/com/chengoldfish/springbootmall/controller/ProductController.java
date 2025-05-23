@@ -1,5 +1,6 @@
 package com.chengoldfish.springbootmall.controller;
 
+import com.chengoldfish.springbootmall.constant.ProductCategory;
 import com.chengoldfish.springbootmall.dto.ProductRequest;
 import com.chengoldfish.springbootmall.model.Product;
 import com.chengoldfish.springbootmall.service.ProductService;
@@ -17,10 +18,13 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //查詢商品列表
+    //查詢商品列表 //category不是必要的值 -> requird=false
     @GetMapping("/products")
-    public  ResponseEntity<List<Product>> getProduct(){
-        List<Product> productList=productService.getProducts();
+    public  ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ){
+        List<Product> productList=productService.getProducts(category,search);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
