@@ -1,11 +1,9 @@
 package com.chengoldfish.springbootmall.controller;
 
-import com.chengoldfish.springbootmall.dao.UserDAO;
+import com.chengoldfish.springbootmall.dao.UserDao;
 import com.chengoldfish.springbootmall.dto.UserRegisterRequest;
 import com.chengoldfish.springbootmall.model.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,7 +27,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserDAO userDAO;
+    private UserDao userDAO;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

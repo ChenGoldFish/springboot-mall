@@ -1,6 +1,6 @@
 package com.chengoldfish.springbootmall.dao.Impl;
 
-import com.chengoldfish.springbootmall.dao.UserDAO;
+import com.chengoldfish.springbootmall.dao.UserDao;
 import com.chengoldfish.springbootmall.dto.UserRegisterRequest;
 import com.chengoldfish.springbootmall.model.User;
 import com.chengoldfish.springbootmall.rowmapper.UserRowMapper;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class UserDAOImpl implements UserDAO {
+public class UserDaoImpl implements UserDao {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;

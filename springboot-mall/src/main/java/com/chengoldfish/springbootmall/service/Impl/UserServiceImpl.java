@@ -1,6 +1,6 @@
 package com.chengoldfish.springbootmall.service.Impl;
 
-import com.chengoldfish.springbootmall.dao.UserDAO;
+import com.chengoldfish.springbootmall.dao.UserDao;
 import com.chengoldfish.springbootmall.dto.UserLoginRequest;
 import com.chengoldfish.springbootmall.dto.UserRegisterRequest;
 import com.chengoldfish.springbootmall.model.User;
@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserDao userDAO;
 
     private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
