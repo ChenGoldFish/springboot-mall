@@ -4,8 +4,12 @@ import com.chengoldfish.springbootmall.dao.UserDAO;
 import com.chengoldfish.springbootmall.dto.UserRegisterRequest;
 import com.chengoldfish.springbootmall.model.User;
 import com.chengoldfish.springbootmall.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -13,13 +17,27 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDAO userDAO;
 
+    private final static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Override
     public User getUserById(Integer userId) {
         return userDAO.getUserById(userId);
     }
 
+    //註冊 命名原因:不單只是創建帳號，還包含了檢查email
     @Override
     public Integer register(UserRegisterRequest userRegisterRequest) {
+
+        //檢查email是否被註冊過
+        User user = userDAO.getUserByEmail(userRegisterRequest.getEmail());
+
+        //如果user存在 回傳400
+        if(user != null){
+            logger.warn("該 email {}  已經被註冊",userRegisterRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        //創建帳號
         return userDAO.createUser(userRegisterRequest);
     }
 }

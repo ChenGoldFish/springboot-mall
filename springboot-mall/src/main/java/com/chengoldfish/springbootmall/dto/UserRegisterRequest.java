@@ -1,10 +1,12 @@
 package com.chengoldfish.springbootmall.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserRegisterRequest {
 
     @NotBlank
+    @Email //是否為email格式
     private String email;
 
     @NotBlank
