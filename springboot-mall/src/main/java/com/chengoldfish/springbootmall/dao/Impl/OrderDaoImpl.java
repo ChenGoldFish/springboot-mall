@@ -61,7 +61,6 @@ public class OrderDaoImpl implements OrderDao {
             parameterSources[i].addValue("quantity", orderItem.getQuantity());
             parameterSources[i].addValue("amount", orderItem.getAmount());
         }
-
         namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
 
     }
