@@ -34,6 +34,8 @@ public class ProductControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products/{productId}", 1);
 
+
+
         mockMvc.perform(requestBuilder)
                 .andDo(print())
                 .andExpect(status().isOk())
