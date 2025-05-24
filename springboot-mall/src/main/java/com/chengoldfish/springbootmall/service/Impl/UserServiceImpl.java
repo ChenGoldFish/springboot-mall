@@ -1,6 +1,7 @@
 package com.chengoldfish.springbootmall.service.Impl;
 
 import com.chengoldfish.springbootmall.dao.UserDAO;
+import com.chengoldfish.springbootmall.dto.UserLoginRequest;
 import com.chengoldfish.springbootmall.dto.UserRegisterRequest;
 import com.chengoldfish.springbootmall.model.User;
 import com.chengoldfish.springbootmall.service.UserService;
@@ -39,5 +40,24 @@ public class UserServiceImpl implements UserService {
 
         //創建帳號
         return userDAO.createUser(userRegisterRequest);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDAO.getUserByEmail(userLoginRequest.getEmail());
+
+        //檢查email
+        if(user == null){
+            logger.warn("該email {} 尚未被註冊",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        //檢查密碼
+        if(user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }else{
+            logger.warn("email {} 的密碼不正確",userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
