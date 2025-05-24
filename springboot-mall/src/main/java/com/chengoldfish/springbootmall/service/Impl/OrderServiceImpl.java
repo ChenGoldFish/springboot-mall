@@ -23,6 +23,21 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductDao productDao;
 
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+
+        //order擴充List
+        //因為一張訂單可能包含了許多order Item，把orderItemList加到Order裡
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
+
+        order.setOrderItemList(orderItemList);
+
+        //oreder現在 包含 訂單總資訊 + 這筆訂單購買了哪些商品
+        return order;
+
+    }
+
     @Transactional //修改多張表格_一定要加 : 確保兩張表格同時新增 或 同時失敗
     @Override
     public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
