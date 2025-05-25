@@ -4,6 +4,7 @@ import com.chengoldfish.springbootmall.dao.OrderDao;
 import com.chengoldfish.springbootmall.dao.ProductDao;
 import com.chengoldfish.springbootmall.dao.UserDao;
 import com.chengoldfish.springbootmall.dto.CreateOrderRequest;
+import com.chengoldfish.springbootmall.dto.OrderQueryParams;
 import com.chengoldfish.springbootmall.model.*;
 import com.chengoldfish.springbootmall.service.OrderService;
 import org.slf4j.Logger;
@@ -26,7 +27,28 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private UserDao userDao;
+
     private final static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        //針對每一個order 都針對一個oderItems，將其放到orderList
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
     @Override
     public Order getOrderById(Integer orderId) {
         Order order = orderDao.getOrderById(orderId);
